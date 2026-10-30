@@ -66,23 +66,24 @@ window.calc=function(kind){
 let lineCount=0;
 window.addLine=function(){
  const table=$("lines");if(!table)return;
- if(!table.querySelector("thead"))table.innerHTML='<thead><tr><th scope="col">Description</th><th scope="col">Qty</th><th scope="col">Unit price</th><th scope="col">Line total</th></tr></thead><tbody></tbody>';
+ if(!table.querySelector("thead"))table.innerHTML='<thead><tr><th scope="col">'+tr("Description")+'</th><th scope="col">'+tr("Qty")+'</th><th scope="col">'+tr("Unit price")+'</th><th scope="col">'+tr("Line total")+'</th></tr></thead><tbody></tbody>';
  const body=table.querySelector("tbody"),id=++lineCount,tr=document.createElement("tr");
- tr.innerHTML='<td><input aria-label="Item description '+id+'" class="item-desc" type="text" placeholder="Service or product"></td><td><input aria-label="Quantity '+id+'" class="item-qty" type="number" min="0" step="any" value="1"></td><td><input aria-label="Unit price '+id+'" class="item-price" type="number" min="0" step="any" value="0"></td><td class="item-total">0.00</td>';
+ tr.innerHTML='<td><input aria-label="Item description '+id+'" class="item-desc" type="text" placeholder="'+tr("Service or product")+'"></td><td><input aria-label="Quantity '+id+'" class="item-qty" type="number" min="0" step="any" value="1"></td><td><input aria-label="Unit price '+id+'" class="item-price" type="number" min="0" step="any" value="0"></td><td class="item-total">0.00</td>';
  body.appendChild(tr);
  tr.querySelectorAll("input").forEach(input=>input.addEventListener("input",()=>{const q=Number(tr.querySelector(".item-qty").value),p=Number(tr.querySelector(".item-price").value);tr.querySelector(".item-total").textContent=(q*p).toFixed(2);}));
 };
 window.makeInv=function(){
  const preview=$("out");if(!preview)return;
  const rows=Array.from(document.querySelectorAll("#lines tbody tr"));
- if(!rows.length){preview.innerHTML='<p class="error">Add at least one invoice item.</p>';return;}
+ if(!rows.length){preview.innerHTML='<p class="error">'+tr("Add at least one invoice item.")+'</p>';return;}
  const items=rows.map(tr=>({desc:tr.querySelector(".item-desc").value.trim(),qty:Number(tr.querySelector(".item-qty").value),price:Number(tr.querySelector(".item-price").value)}));
- if(items.some(x=>!x.desc||!Number.isFinite(x.qty)||!Number.isFinite(x.price)||x.qty<=0||x.price<0)){preview.innerHTML='<p class="error">Complete each item with a description, positive quantity and non-negative price.</p>';return;}
- const taxRate=$("tax")?Number($("tax").value):0;if(!Number.isFinite(taxRate)||taxRate<0||taxRate>100){preview.innerHTML='<p class="error">Enter a valid tax rate from 0–100%.</p>';return;}
+ if(items.some(x=>!x.desc||!Number.isFinite(x.qty)||!Number.isFinite(x.price)||x.qty<=0||x.price<0)){preview.innerHTML='<p class="error">'+tr("Complete each item with a description, positive quantity and non-negative price.")+'</p>';return;}
+ const taxRate=$("tax")?Number($("tax").value):0;if(!Number.isFinite(taxRate)||taxRate<0||taxRate>100){preview.innerHTML='<p class="error">'+tr("Enter a valid tax rate from 0–100%.")+'</p>';return;}
  const symbol=($("cur")&&$("cur").value)||"£",subtotal=items.reduce((s,x)=>s+x.qty*x.price,0),tax=subtotal*taxRate/100,total=subtotal+tax;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const itemRows=items.map(x=>'<tr><td>'+esc(x.desc)+'</td><td>'+x.qty+'</td><td>'+money(x.price,symbol)+'</td><td>'+money(x.qty*x.price,symbol)+'</td></tr>').join("");
  preview.innerHTML='<section class="invoice-preview"><h1>INVOICE</h1><div class="g"><div><h3>From</h3><p>'+esc($("from")?$("from").value:"").replace(/\n/g,"<br>")+'</p></div><div><h3>Bill to</h3><p>'+esc($("to")?$("to").value:"").replace(/\n/g,"<br>")+'</p></div></div><p><strong>Invoice:</strong> '+esc($("no")?$("no").value:"INV-001")+' &nbsp; <strong>Date:</strong> '+esc($("date")?$("date").value:"")+'</p><table><thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Amount</th></tr></thead><tbody>'+itemRows+'</tbody></table><p class="total">Subtotal: '+money(subtotal,symbol)+'<br>Tax ('+taxRate+'%): '+money(tax,symbol)+'<br><strong>Total: '+money(total,symbol)+'</strong></p></section><div class="noprint"><button type="button" onclick="window.print()">Print / Save as PDF</button></div>';
+preview.innerHTML=preview.innerHTML.replace(/INVOICE|Description|Qty|Unit price|Amount|From|Bill to|Invoice:|Date:|Subtotal:|Tax \(|Total:|Print \/ Save as PDF/g,tr);
 };
 function initTaxplexa(){
  if($("lines")&&!$("lines").querySelector("tbody"))window.addLine();
