@@ -1,6 +1,0 @@
-/hi /hi/ 301
-/mr /mr/ 301
-/hi/ /hi-index.html 200
-/mr/ /mr-index.html 200
-/hi/* /hi-:splat 200
-/mr/* /mr-:splat 200
