@@ -164,3 +164,56 @@ Secondary sources may help explain a topic but must not replace official sources
 | Phase 5 | Guides, rates, templates and reference features | Planned |
 
 **This roadmap does not mean any of the planned calculators have been implemented or tax-reviewed.**
+
+
+## Phase 0.5 — Mobile-app-style Tool Discovery & Tool Detail UX
+
+**Status:** Planned only — do not change the live site until explicitly approved.
+
+### Product goal
+A first-time visitor should be able to find the right tool quickly, understand what it does before entering data, complete the calculation on a phone, and understand the result without needing outside help.
+
+### A. Main Tools Directory (app-like dashboard)
+- Use a clean, mobile-first dashboard rather than one long plain list.
+- Put a prominent search field near the top. Search must match tool names, synonyms, and localized terms in English, Hindi, and Marathi.
+- Group tools into clear category sections with category filters. Initial categories: Popular, Loans & Mortgages, Savings & Investments, UK Tax, India Tax, Business & Invoices, Global Finance, and Planning & Templates.
+- Show tools as individual cards/boxes in a responsive grid: two columns on typical phones and more columns on wider screens.
+- Every card must show a recognizable icon, the complete readable tool name, and a short plain-language description. Never truncate or hide the tool name; allow card height to grow or wrap to multiple lines.
+- Add a Popular tools section based on deliberate editorial selection at launch. Add Recently used only if it can be implemented privacy-safely without unnecessary tracking or accounts.
+- Provide clear empty-search and no-results states, a reset/clear filter action, and visible category context.
+- Keep navigation shallow: a visitor should reach any tool in no more than two clear taps from the directory.
+- Do not use icon-only navigation for important actions. All controls need readable labels, adequate touch targets, keyboard support, and visible focus.
+
+### B. Individual Tool Detail Page (same predictable structure for every tool)
+1. Breadcrumb and full tool name.
+2. One-sentence purpose and a short explanation of who should use it.
+3. “How to use” steps before or beside the input form.
+4. Clearly labelled input fields. Explain each field, accepted units, currency, period, and an example where useful.
+5. Relevant jurisdiction and tax year selector where applicable; never imply a tool supports a country or tax year it does not support.
+6. Clear Calculate / Generate action, with validation messages beside the relevant field.
+7. A prominent result area with the key answer first, then a transparent breakdown, assumptions, and formula/method.
+8. A worked example with sample inputs and expected output, clearly marked as illustrative.
+9. Limitations, exclusions, and cases where the result may differ.
+10. At least four useful FAQs, written and reviewed in the selected language.
+11. Official source links and a visible “Last reviewed” date for tax/rate-dependent tools.
+12. Related tools and a clear way back to the directory.
+
+### C. Localization and trust
+- The directory, search hints, category names, card descriptions, forms, validation, results, examples, FAQs, disclaimers, and navigation must all be available in English, Hindi, and Marathi for each published language version.
+- Do not mix English interface labels into Hindi/Marathi pages except for necessary standard terms that are explained.
+- Keep the language switcher visible and preserve the equivalent tool when switching languages.
+- Clearly distinguish calculator estimates from official assessments. Show currency and rounding rules.
+- Never show fabricated popularity counts, ratings, user counts, or “recently used” data.
+
+### D. Design and quality checks
+- Preserve the existing Taxplexa visual identity and static HTML/CSS/JS architecture.
+- Design for narrow Android screens first; check common phone widths, tablet, and desktop.
+- Ensure full tool names remain readable at 200% text zoom and do not overlap icons or controls.
+- Search and category filters must work with keyboard and screen readers, not just visually.
+- Check loading, empty, invalid-input, result, and error states.
+- Test every directory link, language switch, calculator action, and back-navigation path.
+- Do not add heavy libraries, third-party search APIs, login requirements, or tracking just for these features.
+- Keep the directory fast and indexable. Tool detail pages remain the canonical SEO landing pages; category filters/search should not create duplicate indexable URLs.
+
+### E. Release gate
+Before release, prepare a complete tool inventory and reconcile the final count against the agreed scope (the current roadmap lists 34 proposed additions plus 7 existing tools). Approve category placement, display names, and translations. Build and test the directory and one representative detail-page template in a non-production preview first. Do not merge to `main` or trigger a production deployment without the owner's explicit approval.
