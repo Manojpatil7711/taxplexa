@@ -15,14 +15,14 @@ window.calc=function(kind){
  if(kind==="emi"){
   const p=num("amt"),rate=num("rate"),years=num("yrs");
   if(!valid([p,rate,years])||p<=0||years<=0||rate>100){showError("Enter a loan amount above zero, a valid annual rate (0–100%) and a term above zero.");return;}
-  const months=Math.round(years*12),r=rate/1200;
+  const months=Math.max(1,Math.round(years*12)),r=rate/1200;
   const payment=r===0?p/months:p*r/(1-Math.pow(1+r,-months));
   const total=payment*months;
   html=row("Estimated monthly payment",money(payment,cur),true)+row("Total repaid",money(total,cur))+row("Total interest",money(total-p,cur))+row("Number of monthly payments",months.toLocaleString());
  }else if(kind==="comp"){
   const principal=num("p"),deposit=num("c"),rate=num("rate"),years=num("yrs");
   if(!valid([principal,deposit,rate,years])||years<=0||years>100||rate>100){showError("Enter non-negative amounts, a rate from 0–100% and a term from 0–100 years.");return;}
-  const months=Math.round(years*12),monthly=rate/1200;
+  const months=Math.max(1,Math.round(years*12)),monthly=rate/1200;
   let balance=principal;
   for(let i=0;i<months;i++){balance*=1+monthly;balance+=deposit;}
   const contributed=principal+deposit*months;
@@ -79,11 +79,13 @@ window.makeInv=function(){
  const itemRows=items.map(x=>'<tr><td>'+esc(x.desc)+'</td><td>'+x.qty+'</td><td>'+money(x.price,symbol)+'</td><td>'+money(x.qty*x.price,symbol)+'</td></tr>').join("");
  preview.innerHTML='<section class="invoice-preview"><h1>INVOICE</h1><div class="g"><div><h3>From</h3><p>'+esc($("from")?$("from").value:"").replace(/\n/g,"<br>")+'</p></div><div><h3>Bill to</h3><p>'+esc($("to")?$("to").value:"").replace(/\n/g,"<br>")+'</p></div></div><p><strong>Invoice:</strong> '+esc($("no")?$("no").value:"INV-001")+' &nbsp; <strong>Date:</strong> '+esc($("date")?$("date").value:"")+'</p><table><thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Amount</th></tr></thead><tbody>'+itemRows+'</tbody></table><p class="total">Subtotal: '+money(subtotal,symbol)+'<br>Tax ('+taxRate+'%): '+money(tax,symbol)+'<br><strong>Total: '+money(total,symbol)+'</strong></p></section><div class="noprint"><button type="button" onclick="window.print()">Print / Save as PDF</button></div>';
 };
-document.addEventListener("DOMContentLoaded",function(){
+function initTaxplexa(){
  if($("lines")&&!$("lines").querySelector("tbody"))window.addLine();
  const date=$("date");if(date&&!date.value){const now=new Date();date.value=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);}
- document.querySelectorAll('button[onclick^="calc("]').forEach(btn=>{btn.addEventListener("click",function(){const kind=this.getAttribute("onclick").match(/calc\('([^']+)'\)/);if(kind)window.calc(kind[1]);});btn.removeAttribute("onclick");});
- document.querySelectorAll('button[onclick="addLine()"]').forEach(btn=>{btn.addEventListener("click",window.addLine);btn.removeAttribute("onclick");});
- document.querySelectorAll('button[onclick="makeInv()"]').forEach(btn=>{btn.addEventListener("click",window.makeInv);btn.removeAttribute("onclick");});
-});
+}
+if(document.readyState==="loading"){
+ document.addEventListener("DOMContentLoaded",initTaxplexa,{once:true});
+}else{
+ initTaxplexa();
+}
 })();
