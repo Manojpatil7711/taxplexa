@@ -1,4 +1,4 @@
-/* Taxplexa browser-only calculators. Version 2026-11-16-1. No data is sent to a server. */
+/* Taxplexa browser-only calculators. Version 2026-11-16-2. No data is sent to a server. */
 document.documentElement.dataset.taxplexaCalculatorVersion = "2026-11-16-1";
 (function(){
 "use strict";
