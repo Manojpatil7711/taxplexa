@@ -27,6 +27,7 @@ This branch is isolated from `main` and the live Netlify site.
 - Expanded the SDLT purchase-date minimum to 1 January 2015 in all three languages and aligned the shared JavaScript validation message.
 - Checked the sitemap index, all three language sitemaps, robots.txt sitemap reference, canonical host and hreflang alternates. Updated Hindi and Marathi VAT/GST sitemap lastmod dates after the FAQ edits.
 - Reviewed SDLT boundary calculations for the 2020 holiday, July/October 2021 changes, September 2022 thresholds, 31 October 2024 surcharge change and 1 April 2025 thresholds.
+- Added a localized SDLT FAQ and matching structured-data entry explaining the 31 October 2024 transitional rule for contracts exchanged before the change; verified the visible FAQ order matches the JSON-LD order.
 - Cloudflare preview build for the latest branch commit completed successfully. Preview remains noindex; no custom domain or production DNS changes were made.
 
 ## Still pending
