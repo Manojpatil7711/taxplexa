@@ -48,22 +48,22 @@ window.calc=function(kind){
   const gross=num("gross"),year=$( "taxyear" )?Number($("taxyear").value):2026;
   if(!valid([gross])||gross<=0||gross>100000000){showError("Enter a valid annual salary above zero.");return;}
   const years={
-   2015:{pa:10600,basic:31785,additional:150000},
-   2016:{pa:11000,basic:32000,additional:150000},
-   2017:{pa:11500,basic:33500,additional:150000},
-   2018:{pa:11850,basic:34500,additional:150000},
-   2019:{pa:12500,basic:37500,additional:150000},
-   2020:{pa:12500,basic:37500,additional:150000},
-   2021:{pa:12570,basic:37700,additional:150000},
-   2022:{pa:12570,basic:37700,additional:150000},
-   2023:{pa:12570,basic:37700,additional:125140},
-   2024:{pa:12570,basic:37700,additional:125140},
-   2025:{pa:12570,basic:37700,additional:125140},
-   2026:{pa:12570,basic:37700,additional:125140}
+   2015:{pa:10600,basic:31785,additional:150000,additionalIsTaxable:false},
+   2016:{pa:11000,basic:32000,additional:150000,additionalIsTaxable:false},
+   2017:{pa:11500,basic:33500,additional:150000,additionalIsTaxable:false},
+   2018:{pa:11850,basic:34500,additional:150000,additionalIsTaxable:false},
+   2019:{pa:12500,basic:37500,additional:150000,additionalIsTaxable:false},
+   2020:{pa:12500,basic:37500,additional:150000,additionalIsTaxable:false},
+   2021:{pa:12570,basic:37700,additional:150000,additionalIsTaxable:false},
+   2022:{pa:12570,basic:37700,additional:150000,additionalIsTaxable:false},
+   2023:{pa:12570,basic:37700,additional:125140,additionalIsTaxable:true},
+   2024:{pa:12570,basic:37700,additional:125140,additionalIsTaxable:true},
+   2025:{pa:12570,basic:37700,additional:125140,additionalIsTaxable:true},
+   2026:{pa:12570,basic:37700,additional:125140,additionalIsTaxable:true}
   };
   const d=years[year],allowance=Math.max(0,d.pa-Math.max(0,gross-100000)/2),taxable=Math.max(0,gross-allowance);
   const basicTax=Math.min(taxable,d.basic)*.20;
-  const higherTop=d.additional-allowance;
+  const higherTop=d.additional-(d.additionalIsTaxable?0:allowance);
   const higherTax=Math.max(0,Math.min(taxable,higherTop)-d.basic)*.40;
   const additionalTax=Math.max(0,taxable-higherTop)*.45;
   const tax=basicTax+higherTax+additionalTax;
