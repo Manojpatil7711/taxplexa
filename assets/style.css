@@ -6,3 +6,14 @@ main.w{padding-block:34px 12px}main>h1:first-child{font:800 clamp(2.1rem,5vw,3.7
 @media(max-width:650px){.w{width:min(100% - 28px,1080px)}header .w{gap:10px}.logo{font-size:1.45rem}nav{order:3;width:100%;gap:16px}.lang{margin-left:auto}main.w{padding-top:22px}.g{grid-template-columns:1fr}.box{border-radius:15px}.r{align-items:flex-start}.r strong{max-width:55%;overflow-wrap:anywhere}}
 @media print{body{background:#fff;color:#111}header,footer,.noprint,.ad,button{display:none!important}.w{width:100%;max-width:none}main.w{padding:0}.box{border:0;box-shadow:none;padding:0}.invoice-preview{box-shadow:none;padding:0}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Homepage search */
+.site-search{max-width:720px;margin:24px 0 30px;padding:18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.site-search label{margin:0 0 8px;color:var(--ink)}
+.site-search input{min-height:54px;font-size:1rem}
+.search-results{margin-top:8px}
+.search-results[hidden]{display:none}
+.search-results ul{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}
+.search-results a{display:block;padding:11px 13px;border:1px solid var(--line);border-radius:10px;text-decoration:none;font-weight:650;background:var(--bg)}
+.search-results a:hover{border-color:var(--brand);background:color-mix(in srgb,var(--accent) 15%,var(--bg))}
+.search-results p{margin:10px 0;color:var(--muted)}
