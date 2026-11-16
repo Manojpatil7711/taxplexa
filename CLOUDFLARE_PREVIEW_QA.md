@@ -20,3 +20,14 @@ This branch is isolated from `main` and the live Netlify site.
 - Remove that preview-only noindex rule before any approved production release.
 - Do not attach the live custom domain or change DNS during preview testing.
 - Do not merge this branch until visual, functional, SEO and URL checks pass.
+
+## Latest audit — 16 November 2026
+- Confirmed the seven English calculator pages load the shared `/assets/app.js?v=20261116-3` script and call their expected calculator functions.
+- Validated the Hindi and Marathi FAQPage JSON-LD for SDLT, VAT and GST as valid JSON, with localized questions matching the visible FAQ headings. Added the matching `inLanguage` values.
+- Expanded the SDLT purchase-date minimum to 1 January 2015 in all three languages and aligned the shared JavaScript validation message.
+- Checked the sitemap index, all three language sitemaps, robots.txt sitemap reference, canonical host and hreflang alternates. Updated Hindi and Marathi VAT/GST sitemap lastmod dates after the FAQ edits.
+- Reviewed SDLT boundary calculations for the 2020 holiday, July/October 2021 changes, September 2022 thresholds, 31 October 2024 surcharge change and 1 April 2025 thresholds.
+- Cloudflare preview build for the latest branch commit completed successfully. Preview remains noindex; no custom domain or production DNS changes were made.
+
+## Still pending
+- Visual and interactive browser QA on mobile and desktop. The preview deployment is available, but automated page rendering was not accessible from this session. Do not mark this item complete until the pages and calculator interactions have been visually checked.
