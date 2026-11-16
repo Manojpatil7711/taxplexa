@@ -85,11 +85,11 @@ window.calc=function(kind){
   if(date>="2022-09-23"&&date<="2025-03-31")ftbBands=[[425000,0],[625000,.05]];
   else ftbBands=[[300000,0],[500000,.05]];
   const ftbEligible=type==="ftb"&&ftbAvailable&&price<=ftbBands[ftbBands.length-1][0];
-  const chosen=ftbEligible?ftbBands:bands;
+  const chosen=holidayA?bands:(ftbEligible?ftbBands:bands);
   let tax=0,lower=0;
   for(const [upper,rate] of chosen){const slice=Math.max(0,Math.min(price,upper)-lower);tax+=slice*rate;lower=upper;if(price<=upper)break;}
   const surchargeStart="2016-04-01",surchargeEnd="2024-10-30";
-  const additionalRate=type==="add"?(date>="2024-10-31"?.05:(date>=surchargeStart&&date<=surchargeEnd?.03:0)):0;
+  const additionalRate=type==="add"?(date>="2024-10-31"?0.05:(date>=surchargeStart&&date<=surchargeEnd?0.03:0)):0;
   tax+=price*additionalRate;
   const labels=type==="ftb"?(ftbEligible?"First-time buyer relief applied":"First-time buyer relief not available for this date or price"):type==="add"?"Additional property surcharge applied":"Standard residential rates";
   html=row("Estimated Stamp Duty",money(tax,"£"),true)+row("Property price",money(price,"£"))+row("Effective tax rate",(tax/price*100).toFixed(2)+"%")+row("Purchase date",date)+row("Rate category",labels);
