@@ -22,3 +22,7 @@ Free multilingual tax and finance calculators (English, Hindi and Marathi).
 - HMRC Income Tax rates and allowances: https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past
 - HMRC historical SDLT rates: https://www.gov.uk/government/publications/rates-and-allowances-stamp-duty-land-tax
 - HMRC Budget 2026 rates: https://www.gov.uk/government/publications/budget-2026-overview-of-tax-legislation-and-rates-ootlar/annex-a-rates-and-allowances
+
+## Quality assurance
+
+Before publishing any change, test each calculator with known inputs and check language routes, canonical metadata, hreflang links, sitemap URLs, robots.txt, and missing-page handling. Do not switch the custom domain or change production canonical URLs as part of a preview deployment.
