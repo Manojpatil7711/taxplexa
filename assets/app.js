@@ -1,4 +1,4 @@
-/* Taxplexa browser-only calculators. Version 2026-10-30-2. No data is sent to a server. */
+/* Taxplexa browser-only calculators. Version 2026-11-16-1. No data is sent to a server. */
 document.documentElement.dataset.taxplexaCalculatorVersion = "2026-10-30-2";
 (function(){
 "use strict";
@@ -43,27 +43,60 @@ window.calc=function(kind){
   const gross=net+tax;
   html=row("Total including tax",money(gross,cur),true)+row("Amount before tax",money(net,cur))+row("Tax amount",money(tax,cur))+row("Tax rate",rate.toLocaleString()+"%");
  }else if(kind==="uktax"){
-  const gross=num("gross");
+  const gross=num("gross"),year=$( "taxyear" )?Number($("taxyear").value):2026;
   if(!valid([gross])||gross<=0||gross>100000000){showError("Enter a valid annual salary above zero.");return;}
-  const allowance=Math.max(0,12570-Math.max(0,gross-100000)/2);
-  const taxable=Math.max(0,gross-allowance);
-  const tax=Math.min(taxable,37700)*.20+Math.min(Math.max(0,taxable-37700),74870)*.40+Math.max(0,taxable-112570)*.45;
-  const ni=Math.min(Math.max(0,gross-12570),37700)*.08+Math.max(0,gross-50270)*.02;
-  const net=gross-tax-ni;
-  html=row("Estimated take-home pay (annual)",money(net,"£"),true)+row("Monthly take-home pay",money(net/12,"£"))+row("Income Tax",money(tax,"£"))+row("Employee National Insurance",money(ni,"£"))+row("Personal Allowance",money(allowance,"£"));
-  html+='<p class="muted-note">'+tr("Estimate for England, Wales and Northern Ireland only. Excludes pension, student loan, benefits and individual tax-code adjustments. Verify current rules with HMRC.")+'</p>';
+  const years={
+   2015:{pa:10600,basic:31785,additional:150000},
+   2016:{pa:11000,basic:32000,additional:150000},
+   2017:{pa:11500,basic:33500,additional:150000},
+   2018:{pa:11850,basic:34500,additional:150000},
+   2019:{pa:12500,basic:37500,additional:150000},
+   2020:{pa:12500,basic:37500,additional:150000},
+   2021:{pa:12570,basic:37700,additional:150000},
+   2022:{pa:12570,basic:37700,additional:150000},
+   2023:{pa:12570,basic:37700,additional:125140},
+   2024:{pa:12570,basic:37700,additional:125140},
+   2025:{pa:12570,basic:37700,additional:125140},
+   2026:{pa:12570,basic:37700,additional:125140}
+  };
+  const d=years[year],allowance=Math.max(0,d.pa-Math.max(0,gross-100000)/2),taxable=Math.max(0,gross-allowance);
+  const basicTax=Math.min(taxable,d.basic)*.20;
+  const higherTop=d.additional-allowance;
+  const higherTax=Math.max(0,Math.min(taxable,higherTop)-d.basic)*.40;
+  const additionalTax=Math.max(0,taxable-higherTop)*.45;
+  const tax=basicTax+higherTax+additionalTax;
+  const isCurrent=year===2026;
+  html=row("Estimated Income Tax",money(tax,"£"),true)+row("Annual income after Income Tax",money(gross-tax,"£"))+row("Monthly income after Income Tax",money((gross-tax)/12,"£"))+row("Personal Allowance",money(allowance,"£"))+row("Taxable income",money(taxable,"£"));
+  html+='<p class="muted-note">'+(isCurrent?"2026/27 estimate for England, Wales and Northern Ireland. National Insurance, pension, student loan, benefits and individual tax-code adjustments are not included.":"Historical Income Tax estimate for England, Wales and Northern Ireland. National Insurance, pension, student loan, benefits and individual tax-code adjustments are not included.")+'</p>';
  }else if(kind==="sdlt"){
-  const price=num("price"),type=$("type")?$("type").value:"home";
+  const price=num("price"),type=$("type")?$("type").value:"home",date=$("purchaseDate")?$("purchaseDate").value:"2026-11-16";
   if(!valid([price])||price<=0||price>1000000000){showError("Enter a valid property price above zero.");return;}
-  const bands=type==="ftb"?[[300000,0],[500000,.05]]:[[125000,0],[250000,.02],[925000,.05],[1500000,.10],[Infinity,.12]];
+  if(!date||date<"2015-04-06"||date>"2026-12-31"){showError("Enter a purchase date between 6 April 2015 and 31 December 2026.");return;}
+  const holidayA=date>="2020-07-08"&&date<="2021-06-30";
+  const holidayB=date>="2021-07-01"&&date<="2021-09-30";
+  const temp2022=date>="2022-09-23"&&date<="2025-03-31";
+  let bands;
+  if(holidayA)bands=[[500000,0],[925000,.05],[1500000,.10],[Infinity,.12]];
+  else if(holidayB)bands=[[250000,0],[925000,.05],[1500000,.10],[Infinity,.12]];
+  else if(temp2022)bands=[[250000,0],[925000,.05],[1500000,.10],[Infinity,.12]];
+  else bands=[[125000,0],[250000,.02],[925000,.05],[1500000,.10],[Infinity,.12]];
+  const ftbAvailable=date>="2017-11-22";
+  let ftbBands;
+  if(date>="2022-09-23"&&date<="2025-03-31")ftbBands=[[425000,0],[625000,.05]];
+  else ftbBands=[[300000,0],[500000,.05]];
+  const ftbEligible=type==="ftb"&&ftbAvailable&&price<=ftbBands[ftbBands.length-1][0];
+  const chosen=ftbEligible?ftbBands:bands;
   let tax=0,lower=0;
-  for(const [upper,rate] of bands){const slice=Math.max(0,Math.min(price,upper)-lower);tax+=slice*rate;lower=upper;if(price<=upper)break;}
-  if(type==="ftb"&&price>500000){tax=0;lower=0;for(const [upper,rate] of [[125000,0],[250000,.02],[925000,.05],[1500000,.10],[Infinity,.12]]){const slice=Math.max(0,Math.min(price,upper)-lower);tax+=slice*rate;lower=upper;if(price<=upper)break;}}
-  if(type==="add")tax+=price*.05;
-  html=row("Estimated Stamp Duty",money(tax,"£"),true)+row("Property price",money(price,"£"))+row("Effective tax rate",(tax/price*100).toFixed(2)+"%");
-  if(type==="ftb"&&price>500000)html+='<p>First-time buyer relief is not applied above £500,000.</p>';
-  html+='<p class="muted-note">'+tr("England and Northern Ireland residential SDLT estimate only. Confirm buyer eligibility, surcharges and current rules with HMRC or a solicitor.")+'</p>';
- }else{showError("This calculator is not recognised.");return;}
+  for(const [upper,rate] of chosen){const slice=Math.max(0,Math.min(price,upper)-lower);tax+=slice*rate;lower=upper;if(price<=upper)break;}
+  const surchargeStart="2016-04-01",surchargeEnd="2024-10-30";
+  const additionalRate=type==="add"?(date>="2024-10-31"?.05:(date>=surchargeStart&&date<=surchargeEnd?.03:0)):0;
+  tax+=price*additionalRate;
+  const labels=type==="ftb"?(ftbEligible?"First-time buyer relief applied":"First-time buyer relief not available for this date or price"):type==="add"?"Additional property surcharge applied":"Standard residential rates";
+  html=row("Estimated Stamp Duty",money(tax,"£"),true)+row("Property price",money(price,"£"))+row("Effective tax rate",(tax/price*100).toFixed(2)+"%")+row("Purchase date",date)+row("Rate category",labels);
+  if(type==="ftb"&&!ftbAvailable)html+='<p>First-time buyer relief was not available before 22 November 2017.</p>';
+  if(type==="ftb"&&ftbAvailable&&!ftbEligible)html+='<p>First-time buyer relief is not available when the purchase price exceeds the applicable limit.</p>';
+  html+='<p class="muted-note">England and Northern Ireland residential SDLT only. This estimate does not include the 2% non-UK resident surcharge, leasehold rent NPV, corporate purchases or reliefs other than first-time buyer relief. Wales (LTT) and Scotland (LBTT) use different taxes. Verify with HMRC or a solicitor.</p>';
+}else{showError("This calculator is not recognised.");return;}
  el.innerHTML=html;
 };
 let lineCount=0;
