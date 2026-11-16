@@ -84,7 +84,7 @@ window.calc=function(kind){
  }else if(kind==="sdlt"){
   const price=num("price"),type=$("type")?$("type").value:"home",date=$("purchaseDate")?$("purchaseDate").value:"2026-11-16";
   if(!valid([price])||price<=0||price>1000000000){showError("Enter a valid property price above zero.");return;}
-  if(!date||date<"2015-04-06"||date>"2026-12-31"){showError("Enter a purchase date between 6 April 2015 and 31 December 2026.");return;}
+  if(!date||date<"2015-01-01"||date>"2026-12-31"){showError("Enter a purchase date between 1 January 2015 and 31 December 2026.");return;}
   const holidayA=date>="2020-07-08"&&date<="2021-06-30";
   const holidayB=date>="2021-07-01"&&date<="2021-09-30";
   const temp2022=date>="2022-09-23"&&date<="2025-03-31";
