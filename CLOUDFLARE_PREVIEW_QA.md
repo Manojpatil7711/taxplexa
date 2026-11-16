@@ -16,5 +16,7 @@ This branch is isolated from `main` and the live Netlify site.
 - Production branch: `main`.
 - Production deployments: disabled.
 - Preview deployments: enabled for branches.
+- Preview-only `_headers` includes `X-Robots-Tag: noindex, nofollow` to keep this preview out of Google.
+- Remove that preview-only noindex rule before any approved production release.
 - Do not attach the live custom domain or change DNS during preview testing.
 - Do not merge this branch until visual, functional, SEO and URL checks pass.
