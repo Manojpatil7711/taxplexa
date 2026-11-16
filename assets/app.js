@@ -1,5 +1,5 @@
 /* Taxplexa browser-only calculators. Version 2026-11-16-3. No data is sent to a server. */
-document.documentElement.dataset.taxplexaCalculatorVersion = "2026-11-16-1";
+document.documentElement.dataset.taxplexaCalculatorVersion = "2026-11-16-3";
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
@@ -15,7 +15,7 @@ Object.assign(translations.mr,{"Taxable value":"करपात्र मूल�
 const tr=value=>(translations[document.documentElement.lang]&&translations[document.documentElement.lang][value])||value;
 
 const num=id=>{const el=$(id);return el?Number(el.value):NaN};
-const money=(n,sym)=>{const v=Number(n);return (sym||"")+" "+v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})};
+const money=(n,sym)=>{const v=Number(n);if(!Number.isFinite(v))return "—";const currency={"£":"GBP","$":"USD","€":"EUR","₹":"INR","A$":"AUD","C$":"CAD"}[sym]||"GBP";const lang=document.documentElement.lang||"en";const locale=lang==="mr"?"mr-IN":lang==="hi"?"hi-IN":"en-GB";try{return new Intl.NumberFormat(locale,{style:"currency",currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(v);}catch(e){return (sym||"")+" "+v.toLocaleString(locale,{minimumFractionDigits:2,maximumFractionDigits:2});}};
 const out=()=> $("out");
 function showError(message){const el=out();if(el)el.innerHTML='<p class="error" role="alert">'+tr(message)+'</p>';}
 function valid(values){return values.every(v=>Number.isFinite(v))&&values.every(v=>v>=0);}
