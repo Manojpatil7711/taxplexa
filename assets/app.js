@@ -1,4 +1,4 @@
-/* Taxplexa browser-only calculators. Version 2026-11-16-2. No data is sent to a server. */
+/* Taxplexa browser-only calculators. Version 2026-11-16-3. No data is sent to a server. */
 document.documentElement.dataset.taxplexaCalculatorVersion = "2026-11-16-1";
 (function(){
 "use strict";
@@ -10,6 +10,8 @@ Object.assign(translations.hi,{"Estimate for England, Wales and Northern Ireland
 Object.assign(translations.mr,{"Estimate for England, Wales and Northern Ireland only. Excludes pension, student loan, benefits and individual tax-code adjustments. Verify current rules with HMRC.":"हा अंदाज फक्त इंग्लंड, वेल्स आणि नॉर्दर्न आयर्लंडसाठी आहे. यात पेन्शन, स्टुडंट लोन, लाभ आणि वैयक्तिक टॅक्स कोडमधील बदल समाविष्ट नाहीत. सध्याचे नियम HMRC कडून तपासा.","England and Northern Ireland residential SDLT estimate only. Confirm buyer eligibility, surcharges and current rules with HMRC or a solicitor.":"हा अंदाज फक्त इंग्लंड आणि नॉर्दर्न आयर्लंडमधील निवासी SDLT साठी आहे. खरेदीदाराची पात्रता, अतिरिक्त शुल्क आणि सध्याचे नियम HMRC किंवा वकिलाकडून तपासा.","months":"महिने","Add at least one invoice item.":"किमान एक इनव्हॉइस वस्तू जोडा.","Complete each item with a description, positive quantity and non-negative price.":"प्रत्येक वस्तूचे वर्णन, शून्यापेक्षा जास्त प्रमाण आणि शून्य किंवा अधिक किंमत भरा."});
 Object.assign(translations.hi,{"Estimated Income Tax":"अनुमानित आयकर","Annual income after Income Tax":"आयकर के बाद वार्षिक आय","Monthly income after Income Tax":"आयकर के बाद मासिक आय","Taxable income":"कर योग्य आय","Purchase date":"खरीद की तारीख","Rate category":"दर श्रेणी","Standard residential rates":"सामान्य आवासीय दरें","First-time buyer relief applied":"पहली बार खरीदार की छूट लागू","First-time buyer relief not available for this date or price":"इस तारीख या कीमत पर पहली बार खरीदार की छूट उपलब्ध नहीं","Additional property surcharge applied":"अतिरिक्त संपत्ति अधिभार लागू"});
 Object.assign(translations.mr,{"Estimated Income Tax":"अंदाजित इन्कम टॅक्स","Annual income after Income Tax":"इन्कम टॅक्सनंतरचे वार्षिक उत्पन्न","Monthly income after Income Tax":"इन्कम टॅक्सनंतरचे मासिक उत्पन्न","Taxable income":"करपात्र उत्पन्न","Purchase date":"खरेदीची तारीख","Rate category":"दर प्रकार","Standard residential rates":"सामान्य निवासी दर","First-time buyer relief applied":"पहिल्यांदा घर खरेदीदार सवलत लागू","First-time buyer relief not available for this date or price":"या तारखेसाठी किंवा किमतीसाठी पहिल्यांदा खरेदीदार सवलत उपलब्ध नाही","Additional property surcharge applied":"अतिरिक्त मालमत्ता अधिभार लागू"});
+Object.assign(translations.hi,{"Taxable value":"कर योग्य मूल्य","GST amount":"GST राशि","Total including GST":"GST सहित कुल"});
+Object.assign(translations.mr,{"Taxable value":"करपात्र मूल्य","GST amount":"GST रक्कम","Total including GST":"GST सहित एकूण"});
 const tr=value=>(translations[document.documentElement.lang]&&translations[document.documentElement.lang][value])||value;
 
 const num=id=>{const el=$(id);return el?Number(el.value):NaN};
@@ -44,7 +46,16 @@ window.calc=function(kind){
   const tax=mode==="rem"?amount-net:amount*rate/100;
   const gross=net+tax;
   html=row("Total including tax",money(gross,cur),true)+row("Amount before tax",money(net,cur))+row("Tax amount",money(tax,cur))+row("Tax rate",rate.toLocaleString()+"%");
- }else if(kind==="uktax"){
+ }else if(kind==="gst"){
+  const amount=num("amt"),rate=num("rate"),mode=$("mode")?$("mode").value:"add",supply=$("gstType")?$("gstType").value:"intra";
+  if(!valid([amount,rate])||amount<=0||rate>1000){showError("Enter an amount above zero and a tax rate from 0–1,000%.");return;}
+  const net=mode==="rem"?amount/(1+rate/100):amount;
+  const tax=mode==="rem"?amount-net:amount*rate/100;
+  const total=net+tax;
+  html=row("Taxable value",money(net,cur),true)+row("GST amount",money(tax,cur))+row("Total including GST",money(total,cur));
+  if(supply==="inter")html+=row("IGST",money(tax,cur));
+  else html+=row("CGST",money(tax/2,cur))+row("SGST",money(tax/2,cur));
+}else if(kind==="uktax"){
   const gross=num("gross"),year=$( "taxyear" )?Number($("taxyear").value):2026;
   if(!valid([gross])||gross<=0||gross>100000000){showError("Enter a valid annual salary above zero.");return;}
   const years={
