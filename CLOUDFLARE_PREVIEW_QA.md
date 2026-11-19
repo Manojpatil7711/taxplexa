@@ -60,3 +60,17 @@ This branch is isolated from `main` and the live Netlify site.
 ## Remaining
 - Choose/connect the final custom domain (if available) and then update canonical, hreflang, Open Graph and sitemap URLs as one coordinated SEO migration.
 - Visual screenshot review on desktop and mobile remains pending.
+
+## Cloudflare production deployment QA — 19 November 2026
+- Cloudflare Pages project `taxplexa` is connected to GitHub repository `Manojpatil7711/taxplexa` with production branch `cloudflare-production-ready`; production deployments are enabled.
+- Production deployment `55b2827b-f07f-4205-b5d9-24fc4886ad84` completed successfully from commit `a49fc98e6f1874bad1ad2fa7d0d9d986278d1784` after removing the preview-only `X-Robots-Tag: noindex, nofollow` header.
+- Browser checks against `https://taxplexa-preview.pages.dev`: English, Hindi and Marathi home pages returned HTTP 200 and each showed seven calculator cards.
+- All 21 calculator page/language combinations (7 calculators × 3 languages) loaded, ran their calculator action and produced non-empty output. No JavaScript page errors were reported. Invoice generator was tested with a sample service priced at 100.
+- Search query `GST` filtered each language home page to one visible card.
+- Mobile viewport checks at 390 px width for all three home pages showed no horizontal overflow (document width remained 390 px).
+- Canonical and hreflang still intentionally point to `https://taxplexa.netlify.app/` to preserve the existing indexed URL host. Sitemap/robots host migration is not complete; the live production host remains the Pages subdomain until a verified custom domain is attached and canonical migration is planned.
+- Netlify site remains untouched as backup. No DNS records or custom domains were changed.
+
+## Remaining before full domain migration
+- Confirm an owned custom domain to use as the final canonical host (the current known public host is the Netlify subdomain).
+- Then attach the domain to Cloudflare Pages, update canonical, hreflang, Open Graph, robots and all sitemap URLs together, verify redirects, and submit the updated sitemap in Search Console.
