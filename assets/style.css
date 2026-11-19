@@ -19,4 +19,4 @@ main.w{padding-block:34px 12px}main>h1:first-child{font:800 clamp(2.1rem,5vw,3.7
 .search-results p{margin:10px 0;color:var(--muted)}
 
 /* Calculator content tables */
-main table:not(.inv){display:block;width:100%;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:16px 0 24px;-webkit-overflow-scrolling:touch}main table:not(.inv) th,main table:not(.inv) td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}main table:not(.inv) th{background:var(--surface);font-weight:750}main table:not(.inv) tbody tr:nth-child(even){background:color-mix(in srgb,var(--line) 28%,var(--surface))}
+main table.rate-table{display:block;width:100%;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:16px 0 24px;-webkit-overflow-scrolling:touch}main table:not(.inv) th,main table:not(.inv) td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}main table:not(.inv) th{background:var(--surface);font-weight:750}main table:not(.inv) tbody tr:nth-child(even){background:color-mix(in srgb,var(--line) 28%,var(--surface))}
