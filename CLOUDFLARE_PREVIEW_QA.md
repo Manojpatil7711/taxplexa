@@ -46,3 +46,11 @@ This branch is isolated from `main` and the live Netlify site.
 - Confirm the final canonical host and update canonical, hreflang, Open Graph and sitemap URLs together. Current pages intentionally retain the Netlify canonical host to protect the existing indexed URLs until the host decision is finalized.
 - Remove the preview-only `X-Robots-Tag: noindex, nofollow` rule before production.
 - Production deployments remain disabled and the production branch remains `main`. Do not switch the live domain or DNS until the final host/canonical decision is confirmed.
+
+## Luxury and easy-to-use redesign — 19 November 2026
+- Created isolated branch `luxury-easy-2026` from `cloudflare-upgrade-2026`; production branch and live site remain unchanged.
+- Refreshed the English, Hindi and Marathi homepages with a responsive premium hero, prominent search, grouped tool cards, clear action links and trust information.
+- Added a consistent ivory / forest-green / champagne-gold design system, improved form surfaces, focus states, spacing, mobile layout and calculator result panels.
+- Localized Hindi and Marathi invoice-generator instructions, input labels, validation messages and printable invoice headings.
+- Existing seven calculator routes, SEO metadata, canonical URLs, hreflang, sitemap and calculator formulas were preserved.
+- No Netlify preview build was triggered to conserve the remaining deployment credits. Visual desktop/mobile verification and the final preview build remain pending; do not merge or deploy until those checks are approved.
