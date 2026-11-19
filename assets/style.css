@@ -17,3 +17,6 @@ main.w{padding-block:34px 12px}main>h1:first-child{font:800 clamp(2.1rem,5vw,3.7
 .search-results a{display:block;padding:11px 13px;border:1px solid var(--line);border-radius:10px;text-decoration:none;font-weight:650;background:var(--bg)}
 .search-results a:hover{border-color:var(--brand);background:color-mix(in srgb,var(--accent) 15%,var(--bg))}
 .search-results p{margin:10px 0;color:var(--muted)}
+
+/* Calculator content tables */
+main table:not(.inv){display:block;width:100%;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:16px 0 24px;-webkit-overflow-scrolling:touch}main table:not(.inv) th,main table:not(.inv) td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}main table:not(.inv) th{background:var(--surface);font-weight:750}main table:not(.inv) tbody tr:nth-child(even){background:color-mix(in srgb,var(--line) 28%,var(--surface))}
