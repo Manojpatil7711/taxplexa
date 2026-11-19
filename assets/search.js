@@ -27,6 +27,7 @@
   cards.forEach(card=>{
    const item=items.find(x=>card.getAttribute("href")?.endsWith(x.url));
    card.hidden=!!q&&(!item||!matches.includes(item));
+   card.style.display=card.hidden?"none":"";
   });
   if(!q){output.hidden=true;return;}
   output.hidden=false;
