@@ -46,3 +46,17 @@ This branch is isolated from `main` and the live Netlify site.
 - Confirm the final canonical host and update canonical, hreflang, Open Graph and sitemap URLs together. Current pages intentionally retain the Netlify canonical host to protect the existing indexed URLs until the host decision is finalized.
 - Remove the preview-only `X-Robots-Tag: noindex, nofollow` rule before production.
 - Production deployments remain disabled and the production branch remains `main`. Do not switch the live domain or DNS until the final host/canonical decision is confirmed.
+
+## Production deployment — 19 November 2026
+- Cloudflare Pages project renamed to `taxplexa`; production branch is `cloudflare-production-ready`.
+- Production deployments are enabled for GitHub pushes. Preview deployments remain enabled for other branches.
+- Production deployment `55b2827b-f07f-4205-b5d9-24fc4886ad84` completed successfully from commit `a49fc98e6f1874bad1ad2fa7d0d9d986278d1784`.
+- Stable production URL: `https://taxplexa-preview.pages.dev`.
+- Re-tested all seven English calculators on Production; each returned a result. Re-tested all three language home pages and GST search filtering; all passed. No JavaScript page errors. Mobile Marathi home page at 390 px had no horizontal overflow.
+- The production `_headers` file no longer contains the preview-only noindex rule. The preview branch retains noindex.
+- Current canonical, hreflang and sitemap hosts remain `https://taxplexa.netlify.app` to avoid an unapproved SEO host change. No custom domain is attached to this Cloudflare account yet.
+- Netlify remains live as backup; no Netlify deployment or DNS changes were made.
+
+## Remaining
+- Choose/connect the final custom domain (if available) and then update canonical, hreflang, Open Graph and sitemap URLs as one coordinated SEO migration.
+- Visual screenshot review on desktop and mobile remains pending.
