@@ -32,3 +32,17 @@ This branch is isolated from `main` and the live Netlify site.
 
 ## Still pending
 - Visual and interactive browser QA on mobile and desktop. The preview deployment is available, but automated page rendering was not accessible from this session. Do not mark this item complete until the pages and calculator interactions have been visually checked.
+
+## Browser functional QA — 19 November 2026
+- Ran browser interaction checks on all seven calculators in English, Hindi and Marathi (21 page/language cases). Each page loaded with HTTP 200, its calculator action ran, and a non-empty result appeared. The invoice generator was tested by adding a sample service at 100 and creating the invoice preview.
+- No browser JavaScript page errors were reported during the 21 calculator checks.
+- Confirmed `/`, `/hi/` and `/mr/` load and each lists seven tools.
+- Confirmed GST search filters each language's home-page cards to one result; an unmatched query hides all cards and shows the localized no-results message; clearing search restores all seven cards.
+- Checked the Marathi home page at a 390 × 844 mobile viewport; document width matched viewport width (390 px), with no horizontal overflow.
+- Search filtering was corrected in `assets/search.js` and the latest preview build completed successfully on commit `5790988423e03bf51ccd106c886858fe4460bd76`.
+
+## Remaining before production
+- Visual review of desktop and mobile screenshots is still pending.
+- Confirm the final canonical host and update canonical, hreflang, Open Graph and sitemap URLs together. Current pages intentionally retain the Netlify canonical host to protect the existing indexed URLs until the host decision is finalized.
+- Remove the preview-only `X-Robots-Tag: noindex, nofollow` rule before production.
+- Production deployments remain disabled and the production branch remains `main`. Do not switch the live domain or DNS until the final host/canonical decision is confirmed.
