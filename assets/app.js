@@ -13,6 +13,9 @@ Object.assign(translations.mr,{"Estimated Income Tax":"अंदाजित इ
 Object.assign(translations.hi,{"Taxable value":"कर योग्य मूल्य","GST amount":"GST राशि","Total including GST":"GST सहित कुल"});
 Object.assign(translations.mr,{"Taxable value":"करपात्र मूल्य","GST amount":"GST रक्कम","Total including GST":"GST सहित एकूण"});
 const tr=value=>(translations[document.documentElement.lang]&&translations[document.documentElement.lang][value])||value;
+Object.assign(translations.hi,{"Item description":"वस्तु का विवरण","Quantity":"मात्रा","Add at least one invoice item.":"कम से कम एक वस्तु जोड़ें.","Complete each item with a description, positive quantity and non-negative price.":"हर वस्तु का विवरण, सकारात्मक मात्रा और शून्य या अधिक कीमत भरें.","Enter a valid tax rate from 0–100%.":"0–100% के बीच सही कर दर दर्ज करें."});
+Object.assign(translations.mr,{"Item description":"वस्तूचे वर्णन","Quantity":"प्रमाण","Add at least one invoice item.":"किमान एक वस्तू जोडा.","Complete each item with a description, positive quantity and non-negative price.":"प्रत्येक वस्तूचे वर्णन, सकारात्मक प्रमाण आणि शून्य किंवा अधिक किंमत भरा.","Enter a valid tax rate from 0–100%.":"0–100% दरम्यान योग्य करदर नोंदवा."});
+
 
 const num=id=>{const el=$(id);return el?Number(el.value):NaN};
 const money=(n,sym)=>{const v=Number(n);if(!Number.isFinite(v))return "—";const currency={"£":"GBP","$":"USD","€":"EUR","₹":"INR","A$":"AUD","C$":"CAD"}[sym]||"GBP";const lang=document.documentElement.lang||"en";const locale=lang==="mr"?"mr-IN":lang==="hi"?"hi-IN":"en-GB";try{return new Intl.NumberFormat(locale,{style:"currency",currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(v);}catch(e){return (sym||"")+" "+v.toLocaleString(locale,{minimumFractionDigits:2,maximumFractionDigits:2});}};
@@ -115,9 +118,9 @@ window.calc=function(kind){
 let lineCount=0;
 window.addLine=function(){
  const table=$("lines");if(!table)return;
- if(!table.querySelector("thead"))table.innerHTML='<thead><tr><th scope="col">Description</th><th scope="col">Qty</th><th scope="col">Unit price</th><th scope="col">Line total</th></tr></thead><tbody></tbody>';
+ if(!table.querySelector("thead"))table.innerHTML='<thead><tr><th scope="col">'+tr("Description")+'</th><th scope="col">'+tr("Qty")+'</th><th scope="col">'+tr("Unit price")+'</th><th scope="col">'+tr("Line total")+'</th></tr></thead><tbody></tbody>';
  const body=table.querySelector("tbody"),id=++lineCount,tr=document.createElement("tr");
- tr.innerHTML='<td><input aria-label="Item description '+id+'" class="item-desc" type="text" placeholder="Service or product"></td><td><input aria-label="Quantity '+id+'" class="item-qty" type="number" min="0" step="any" value="1"></td><td><input aria-label="Unit price '+id+'" class="item-price" type="number" min="0" step="any" value="0"></td><td class="item-total">0.00</td>';
+ tr.innerHTML='<td><input aria-label="'+tr("Item description")+' '+id+'" class="item-desc" type="text" placeholder="'+tr("Service or product")+'"></td><td><input aria-label="'+tr("Quantity")+' '+id+'" class="item-qty" type="number" min="0" step="any" value="1"></td><td><input aria-label="'+tr("Unit price")+' '+id+'" class="item-price" type="number" min="0" step="any" value="0"></td><td class="item-total">0.00</td>';
  body.appendChild(tr);
  tr.querySelectorAll("input").forEach(input=>input.addEventListener("input",()=>{const q=Number(tr.querySelector(".item-qty").value),p=Number(tr.querySelector(".item-price").value);tr.querySelector(".item-total").textContent=(q*p).toFixed(2);}));
 };
@@ -131,7 +134,7 @@ window.makeInv=function(){
  const symbol=($("cur")&&$("cur").value)||"£",subtotal=items.reduce((s,x)=>s+x.qty*x.price,0),tax=subtotal*taxRate/100,total=subtotal+tax;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const itemRows=items.map(x=>'<tr><td>'+esc(x.desc)+'</td><td>'+x.qty+'</td><td>'+money(x.price,symbol)+'</td><td>'+money(x.qty*x.price,symbol)+'</td></tr>').join("");
- preview.innerHTML='<section class="invoice-preview"><h1>INVOICE</h1><div class="g"><div><h3>From</h3><p>'+esc($("from")?$("from").value:"").replace(/\n/g,"<br>")+'</p></div><div><h3>Bill to</h3><p>'+esc($("to")?$("to").value:"").replace(/\n/g,"<br>")+'</p></div></div><p><strong>Invoice:</strong> '+esc($("no")?$("no").value:"INV-001")+' &nbsp; <strong>Date:</strong> '+esc($("date")?$("date").value:"")+'</p><table><thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Amount</th></tr></thead><tbody>'+itemRows+'</tbody></table><p class="total">Subtotal: '+money(subtotal,symbol)+'<br>Tax ('+taxRate+'%): '+money(tax,symbol)+'<br><strong>Total: '+money(total,symbol)+'</strong></p></section><div class="noprint"><button type="button" onclick="window.print()">Print / Save as PDF</button></div>';
+ preview.innerHTML='<section class="invoice-preview"><h1>'+tr("INVOICE")+'</h1><div class="g"><div><h3>'+tr("From")+'</h3><p>'+esc($("from")?$("from").value:"").replace(/\n/g,"<br>")+'</p></div><div><h3>'+tr("Bill to")+'</h3><p>'+esc($("to")?$("to").value:"").replace(/\n/g,"<br>")+'</p></div></div><p><strong>'+tr("Invoice:")+'</strong> '+esc($("no")?$("no").value:"INV-001")+' &nbsp; <strong>'+tr("Date:")+'</strong> '+esc($("date")?$("date").value:"")+'</p><table><thead><tr><th>'+tr("Description")+'</th><th>'+tr("Qty")+'</th><th>'+tr("Unit price")+'</th><th>'+tr("Amount")+'</th></tr></thead><tbody>'+itemRows+'</tbody></table><p class="total">'+tr("Subtotal:")+' '+money(subtotal,symbol)+'<br>'+tr("Tax (") +taxRate+'%): '+money(tax,symbol)+'<br><strong>'+tr("Total:")+' '+money(total,symbol)+'</strong></p></section><div class="noprint"><button type="button" onclick="window.print()">'+tr("Print / Save as PDF")+'</button></div>';
 };
 function initTaxplexa(){
  if($("lines")&&!$("lines").querySelector("tbody"))window.addLine();
