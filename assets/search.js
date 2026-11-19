@@ -5,6 +5,7 @@
  const output=document.getElementById("search-results");
  if(!input||!output)return;
  const lang=document.documentElement.lang||"en";
+ const cards=Array.from(document.querySelectorAll(".cards a"));
  const items=[
   {url:"/loan-emi-calculator.html",en:"Loan EMI and Mortgage Calculator",hi:"लोन EMI और मॉर्गेज कैलकुलेटर",mr:"कर्ज EMI आणि मॉर्गेज कॅल्क्युलेटर",keys:"loan emi mortgage interest monthly payment"},
   {url:"/compound-interest-calculator.html",en:"Compound Interest Calculator",hi:"चक्रवृद्धि ब्याज कैलकुलेटर",mr:"चक्रवाढ व्याज कॅल्क्युलेटर",keys:"compound interest savings investment"},
@@ -22,8 +23,12 @@
  function render(){
   const q=input.value.trim().toLocaleLowerCase();
   output.replaceChildren();
+  const matches=q?items.filter(x=>(x[field]+" "+x.keys).toLocaleLowerCase().includes(q)):items;
+  cards.forEach(card=>{
+   const item=items.find(x=>card.getAttribute("href")?.endsWith(x.url));
+   card.hidden=!!q&&(!item||!matches.includes(item));
+  });
   if(!q){output.hidden=true;return;}
-  const matches=items.filter(x=>(x[field]+" "+x.keys).toLocaleLowerCase().includes(q));
   output.hidden=false;
   if(!matches.length){const p=document.createElement("p");p.textContent=empty;output.append(p);return;}
   const list=document.createElement("ul");
