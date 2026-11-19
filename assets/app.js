@@ -14,6 +14,8 @@ Object.assign(translations.hi,{"Taxable value":"कर योग्य मूल
 Object.assign(translations.mr,{"Taxable value":"करपात्र मूल्य","GST amount":"GST रक्कम","Total including GST":"GST सहित एकूण"});
 const tr=value=>(translations[document.documentElement.lang]&&translations[document.documentElement.lang][value])||value;
 Object.assign(translations.hi,{"Item description":"वस्तु का विवरण","Quantity":"मात्रा","Add at least one invoice item.":"कम से कम एक वस्तु जोड़ें.","Complete each item with a description, positive quantity and non-negative price.":"हर वस्तु का विवरण, सकारात्मक मात्रा और शून्य या अधिक कीमत भरें.","Enter a valid tax rate from 0–100%.":"0–100% के बीच सही कर दर दर्ज करें."});
+Object.assign(translations.hi,{"Line total":"कुल राशि"});
+Object.assign(translations.mr,{"Line total":"एकूण रक्कम"});
 Object.assign(translations.mr,{"Item description":"वस्तूचे वर्णन","Quantity":"प्रमाण","Add at least one invoice item.":"किमान एक वस्तू जोडा.","Complete each item with a description, positive quantity and non-negative price.":"प्रत्येक वस्तूचे वर्णन, सकारात्मक प्रमाण आणि शून्य किंवा अधिक किंमत भरा.","Enter a valid tax rate from 0–100%.":"0–100% दरम्यान योग्य करदर नोंदवा."});
 
 
@@ -127,10 +129,10 @@ window.addLine=function(){
 window.makeInv=function(){
  const preview=$("out");if(!preview)return;
  const rows=Array.from(document.querySelectorAll("#lines tbody tr"));
- if(!rows.length){preview.innerHTML='<p class="error">Add at least one invoice item.</p>';return;}
+ if(!rows.length){preview.innerHTML='<p class="error">' + tr("Add at least one invoice item.") + '</p>';return;}
  const items=rows.map(tr=>({desc:tr.querySelector(".item-desc").value.trim(),qty:Number(tr.querySelector(".item-qty").value),price:Number(tr.querySelector(".item-price").value)}));
- if(items.some(x=>!x.desc||!Number.isFinite(x.qty)||!Number.isFinite(x.price)||x.qty<=0||x.price<0)){preview.innerHTML='<p class="error">Complete each item with a description, positive quantity and non-negative price.</p>';return;}
- const taxRate=$("tax")?Number($("tax").value):0;if(!Number.isFinite(taxRate)||taxRate<0||taxRate>100){preview.innerHTML='<p class="error">Enter a valid tax rate from 0–100%.</p>';return;}
+ if(items.some(x=>!x.desc||!Number.isFinite(x.qty)||!Number.isFinite(x.price)||x.qty<=0||x.price<0)){preview.innerHTML='<p class="error">' + tr("Complete each item with a description, positive quantity and non-negative price.") + '</p>';return;}
+ const taxRate=$("tax")?Number($("tax").value):0;if(!Number.isFinite(taxRate)||taxRate<0||taxRate>100){preview.innerHTML='<p class="error">' + tr("Enter a valid tax rate from 0–100%.") + '</p>';return;}
  const symbol=($("cur")&&$("cur").value)||"£",subtotal=items.reduce((s,x)=>s+x.qty*x.price,0),tax=subtotal*taxRate/100,total=subtotal+tax;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const itemRows=items.map(x=>'<tr><td>'+esc(x.desc)+'</td><td>'+x.qty+'</td><td>'+money(x.price,symbol)+'</td><td>'+money(x.qty*x.price,symbol)+'</td></tr>').join("");
